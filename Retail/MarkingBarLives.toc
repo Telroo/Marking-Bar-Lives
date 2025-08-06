@@ -1,10 +1,10 @@
-## Interface: 110107
+## Interface: 110200
 ## Title: Marking|cff69ccf0Bar|cffff0000Lives
 ## Notes: Quickly and easily add raid icons and world flairs, and announce them in chat.
 ## Author: Telryu-Feathermoon US (Previously Vilandra-Blade's Edge US & maintained by Kvee-Magtheridon EU)
 ## IconTexture: interface\targetingframe\ui-raidtargetingicon_1
 ## Dependencies: 
-## Version: 11.1.7
+## Version: 11.2.0
 ## SavedVariablesPerCharacter: MBDB, MBCtrlDB, MBFlaresDB
 ## SavedVariables: MBGLOBAL
 ## OptionalDependencies: WagoAnalytics
@@ -13,7 +13,7 @@
 ## X-License: GPL v3
 ## X-Curse-Project-ID: 396005
 ## X-Wago-ID: anKWn46E
-## X-Interface: 110107
+## X-Interface: 110200
 
 MarkingBarLives.lua
 
