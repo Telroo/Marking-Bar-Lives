@@ -4,8 +4,8 @@
 ## Author: Telryu-Feathermoon US (Previously Vilandra-Blade's Edge US & maintained by Kvee-Magtheridon EU)
 ## IconTexture: interface\targetingframe\ui-raidtargetingicon_1
 ## Version: 12.0.0
-## SavedVariables: MarkingBarLivesDB
-## SavedVariablesPerCharacter:
+## SavedVariables: MarkingBarLivesDB, MBGLOBAL
+## SavedVariablesPerCharacter: MBDB, MBCtrlDB, MBFlaresDB
 ## Category-enUS: MarkingBarLives
 ## Dependencies: 
 ## OptionalDependencies: WagoAnalytics
