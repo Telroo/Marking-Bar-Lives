@@ -1,3 +1,13 @@
+Version 12.0.0
+Compatibility Update for Midnight
+Updated TOC
+Due to Protection UI actions from Midnight update
+  **SetRaidIcon by replacing it with Macro for Target Markers and adding "SecureActionButtonTemplate"
+  **Frame:Show and Frame:Hide had to rewrite those sections to not fire duing combat
+  **Opening Options page while in combat not allowed so locked the button while in combat
+  **Moving Bar while in combat is not allowed so locked the moving bars while in combat
+Save Postions for the bars where acting up so reevluated and updated
+
 Version 11.2.0
 Updatedd TOC
 
