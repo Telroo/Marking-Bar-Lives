@@ -134,8 +134,32 @@ moverLeft:EnableMouse(true)
 moverLeft:SetMovable(true)
 moverLeft:SetSize(20,35)
 moverLeft:SetPoint("RIGHT", MB_mainFrame, "LEFT")
-moverLeft:SetScript("OnMouseDown", function(self,button) if (button=="LeftButton") then MB_mainFrame:StartMoving() end end)
-moverLeft:SetScript("OnMouseUp", function(self) MB_mainFrame:StopMovingOrSizing() end)
+moverLeft:SetScript("OnEnter", function(self)
+	GameTooltip:SetOwner(self, "ANCHOR_CURSOR"); 
+	GameTooltip:ClearLines(); 
+	if InCombatLockdown() then 
+		GameTooltip:AddLine("Cannot move in combat", 1, 0.3, 0.3) 
+	else 
+		GameTooltip:AddLine("Move Bar",0.88,0.65,0) 
+	end; 
+	GameTooltip:Show() 
+end)
+moverLeft:RegisterForDrag("LeftButton")
+moverLeft:SetScript("OnDragStart", function()
+    if InCombatLockdown() then 
+		return 
+	else
+		MB_mainFrame:StartMoving()
+	end
+end)
+moverLeft:SetScript("OnDragStop", function()
+    if InCombatLockdown() then 
+		return 
+	else
+		MB_mainFrame:StopMovingOrSizing()
+		MB_savepositions()
+	end
+end)
 
 -------------------------------------------------------
 -- MB Icon Frame and Icons
@@ -149,83 +173,123 @@ iconFrame:SetMovable(true)
 iconFrame:SetSize(190,35)
 iconFrame:SetPoint("LEFT", MB_mainFrame, "LEFT")
 
-local iconSkull = CreateFrame("Button", "iconSkull", iconFrame)
+local iconSkull = CreateFrame("Button", "iconSkull", iconFrame, "SecureActionButtonTemplate")
 iconSkull:SetSize(15,15)
 iconSkull:SetPoint("LEFT", iconFrame, "LEFT",5,0)
 iconSkull:SetNormalTexture("interface\\targetingframe\\ui-raidtargetingicons")
 iconSkull:GetNormalTexture():SetTexCoord(0.75,1,0.25,0.5)
 iconSkull:EnableMouse(true)
-iconSkull:SetScript("OnClick", function(self) SetRaidTargetIcon("target", 8) end)
+
+--iconSkull:SetScript("OnClick", function(self) SetRaidTargetIcon("target", 8) end)
+iconSkull:RegisterForClicks("AnyDown")
+iconSkull:SetAttribute("type", "macro")
+iconSkull:SetAttribute("macrotext", "/tm 8")
+
 iconSkull:SetScript("OnEnter", function(self) if (MBDB.tooltips==true) then GameTooltip:SetOwner(self, "ANCHOR_CURSOR"); GameTooltip:ClearLines(); if MBDB.announce_tooltip then GameTooltip:AddLine(MBDB.msg_skull, 1,1,1,true); end GameTooltip:AddLine("Skull", 0.88,0.65,0); GameTooltip:Show() end end)
 iconSkull:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
-local iconCross = CreateFrame("Button", "iconCross", iconFrame)
+local iconCross = CreateFrame("Button", "iconCross", iconFrame, "SecureActionButtonTemplate")
 iconCross:SetSize(15,15)
 iconCross:SetPoint("LEFT", iconSkull, "RIGHT")
 iconCross:SetNormalTexture("interface\\targetingframe\\ui-raidtargetingicons")
 iconCross:GetNormalTexture():SetTexCoord(0.5,0.75,0.25,0.5)
 iconCross:EnableMouse(true)
-iconCross:SetScript("OnClick", function(self) SetRaidTargetIcon("target", 7) end)
+
+--iconCross:SetScript("OnClick", function(self) SetRaidTargetIcon("target", 7) end)
+iconCross:RegisterForClicks("AnyDown")
+iconCross:SetAttribute("type", "macro")
+iconCross:SetAttribute("macrotext", "/tm 7")
+
 iconCross:SetScript("OnEnter", function(self) if (MBDB.tooltips==true) then GameTooltip:SetOwner(self, "ANCHOR_CURSOR"); GameTooltip:ClearLines(); if MBDB.announce_tooltip then GameTooltip:AddLine(MBDB.msg_cross, 1,1,1,true); end GameTooltip:AddLine("Cross", 0.88,0.65,0); GameTooltip:Show() end end)
 iconCross:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
-local iconSquare = CreateFrame("Button", "iconSquare", iconFrame)
+local iconSquare = CreateFrame("Button", "iconSquare", iconFrame, "SecureActionButtonTemplate")
 iconSquare:SetSize(15,15)
 iconSquare:SetPoint("LEFT", iconCross, "RIGHT")
 iconSquare:SetNormalTexture("interface\\targetingframe\\ui-raidtargetingicons")
 iconSquare:GetNormalTexture():SetTexCoord(0.25,0.5,0.25,0.5)
 iconSquare:EnableMouse(true)
-iconSquare:SetScript("OnClick", function(self) SetRaidTargetIcon("target", 6) end)
+
+--iconSquare:SetScript("OnClick", function(self) SetRaidTargetIcon("target", 6) end)
+iconSquare:RegisterForClicks("AnyDown")
+iconSquare:SetAttribute("type", "macro")
+iconSquare:SetAttribute("macrotext", "/tm 6")
+
 iconSquare:SetScript("OnEnter", function(self) if (MBDB.tooltips==true) then GameTooltip:SetOwner(self, "ANCHOR_CURSOR"); GameTooltip:ClearLines(); if MBDB.announce_tooltip then GameTooltip:AddLine(MBDB.msg_square, 1,1,1,true); end GameTooltip:AddLine("Square", 0.88,0.65,0); GameTooltip:Show() end end)
 iconSquare:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
-local iconMoon = CreateFrame("Button", "iconMoon", iconFrame)
+local iconMoon = CreateFrame("Button", "iconMoon", iconFrame, "SecureActionButtonTemplate")
 iconMoon:SetSize(15,15)
 iconMoon:SetPoint("LEFT", iconSquare, "RIGHT")
 iconMoon:SetNormalTexture("interface\\targetingframe\\ui-raidtargetingicons")
 iconMoon:GetNormalTexture():SetTexCoord(0,0.25,0.25,0.5)
 iconMoon:EnableMouse(true)
-iconMoon:SetScript("OnClick", function(self) SetRaidTargetIcon("target", 5) end)
+
+--iconMoon:SetScript("OnClick", function(self) SetRaidTargetIcon("target", 5) end)
+iconMoon:RegisterForClicks("AnyDown")
+iconMoon:SetAttribute("type", "macro")
+iconMoon:SetAttribute("macrotext", "/tm 5")
+
 iconMoon:SetScript("OnEnter", function(self) if (MBDB.tooltips==true) then GameTooltip:SetOwner(self, "ANCHOR_CURSOR"); GameTooltip:ClearLines(); if MBDB.announce_tooltip then GameTooltip:AddLine(MBDB.msg_moon, 1,1,1,true); end GameTooltip:AddLine("Moon", 0.88,0.65,0); GameTooltip:Show() end end)
 iconMoon:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
-local iconTriangle = CreateFrame("Button", "iconTriangle", iconFrame)
+local iconTriangle = CreateFrame("Button", "iconTriangle", iconFrame, "SecureActionButtonTemplate")
 iconTriangle:SetSize(15,15)
 iconTriangle:SetPoint("LEFT", iconMoon, "RIGHT")
 iconTriangle:SetNormalTexture("interface\\targetingframe\\ui-raidtargetingicons")
 iconTriangle:GetNormalTexture():SetTexCoord(0.75,1,0,0.25)
 iconTriangle:EnableMouse(true)
-iconTriangle:SetScript("OnClick", function(self) SetRaidTargetIcon("target", 4) end)
+
+--iconTriangle:SetScript("OnClick", function(self) SetRaidTargetIcon("target", 4) end)
+iconTriangle:RegisterForClicks("AnyDown")
+iconTriangle:SetAttribute("type", "macro")
+iconTriangle:SetAttribute("macrotext", "/tm 4")
+
 iconTriangle:SetScript("OnEnter", function(self) if (MBDB.tooltips==true) then GameTooltip:SetOwner(self, "ANCHOR_CURSOR"); GameTooltip:ClearLines(); if MBDB.announce_tooltip then GameTooltip:AddLine(MBDB.msg_triangle, 1,1,1,true); end GameTooltip:AddLine("Triangle", 0.88,0.65,0); GameTooltip:Show() end end)
 iconTriangle:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
-local iconDiamond = CreateFrame("Button", "iconDiamond", iconFrame)
+local iconDiamond = CreateFrame("Button", "iconDiamond", iconFrame, "SecureActionButtonTemplate")
 iconDiamond:SetSize(15,15)
 iconDiamond:SetPoint("LEFT", iconTriangle, "RIGHT")
 iconDiamond:SetNormalTexture("interface\\targetingframe\\ui-raidtargetingicons")
 iconDiamond:GetNormalTexture():SetTexCoord(0.5,0.75,0,0.25)
 iconDiamond:EnableMouse(true)
-iconDiamond:SetScript("OnClick", function(self) SetRaidTargetIcon("target", 3) end)
+
+--iconDiamond:SetScript("OnClick", function(self) SetRaidTargetIcon("target", 3) end)
+iconDiamond:RegisterForClicks("AnyDown")
+iconDiamond:SetAttribute("type", "macro")
+iconDiamond:SetAttribute("macrotext", "/tm 3")
+
 iconDiamond:SetScript("OnEnter", function(self) if (MBDB.tooltips==true) then GameTooltip:SetOwner(self, "ANCHOR_CURSOR"); GameTooltip:ClearLines(); if MBDB.announce_tooltip then GameTooltip:AddLine(MBDB.msg_diamond, 1,1,1,true); end GameTooltip:AddLine("Diamond", 0.88,0.65,0); GameTooltip:Show() end end)
 iconDiamond:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
-local iconCircle = CreateFrame("Button", "iconCircle", iconFrame)
+local iconCircle = CreateFrame("Button", "iconCircle", iconFrame, "SecureActionButtonTemplate")
 iconCircle:SetSize(15,15)
 iconCircle:SetPoint("LEFT", iconDiamond, "RIGHT")
 iconCircle:SetNormalTexture("interface\\targetingframe\\ui-raidtargetingicons")
 iconCircle:GetNormalTexture():SetTexCoord(0.25,0.5,0,0.25)
 iconCircle:EnableMouse(true)
-iconCircle:SetScript("OnClick", function(self) SetRaidTargetIcon("target", 2) end)
+
+--iconCircle:SetScript("OnClick", function(self) SetRaidTargetIcon("target", 2) end)
+iconCircle:RegisterForClicks("AnyDown")
+iconCircle:SetAttribute("type", "macro")
+iconCircle:SetAttribute("macrotext", "/tm 2")
+
 iconCircle:SetScript("OnEnter", function(self) if (MBDB.tooltips==true) then GameTooltip:SetOwner(self, "ANCHOR_CURSOR"); GameTooltip:ClearLines(); if MBDB.announce_tooltip then GameTooltip:AddLine(MBDB.msg_circle, 1,1,1,true); end GameTooltip:AddLine("Circle", 0.88,0.65,0); GameTooltip:Show() end end)
 iconCircle:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
-local iconStar = CreateFrame("Button", "iconStar", iconFrame)
+local iconStar = CreateFrame("Button", "iconStar", iconFrame, "SecureActionButtonTemplate")
 iconStar:SetSize(15,15)
 iconStar:SetPoint("LEFT", iconCircle, "RIGHT")
 iconStar:SetNormalTexture("interface\\targetingframe\\ui-raidtargetingicons")
 iconStar:GetNormalTexture():SetTexCoord(0,0.25,0,0.25)
 iconStar:EnableMouse(true)
-iconStar:SetScript("OnClick", function(self) SetRaidTargetIcon("target", 1) end)
+
+--iconStar:SetScript("OnClick", function(self) SetRaidTargetIcon("target", 1) end)
+iconStar:RegisterForClicks("AnyDown")
+iconStar:SetAttribute("type", "macro")
+iconStar:SetAttribute("macrotext", "/tm 1")
+
 iconStar:SetScript("OnEnter", function(self) if (MBDB.tooltips==true) then GameTooltip:SetOwner(self, "ANCHOR_CURSOR"); GameTooltip:ClearLines(); if MBDB.announce_tooltip then GameTooltip:AddLine(MBDB.msg_star, 1,1,1,true); end GameTooltip:AddLine("Star", 0.88,0.65,0); GameTooltip:Show() end end)
 iconStar:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
@@ -236,11 +300,11 @@ lockIcon:SetNormalTexture("Interface\\AddOns\\MarkingBarLives\\resources\\Glues-
 lockIcon:GetNormalTexture():SetTexCoord(0.25, 0.50, 0, 1)
 lockIcon:EnableMouse(true)
 lockIcon:SetScript("OnClick", function(self) MB_lockToggle("main") end)
-lockIcon:SetScript("OnEnter", function(self) if (MBDB.tooltips==true) then GameTooltip:SetOwner(self, "ANCHOR_CURSOR"); GameTooltip:ClearLines(); if InCombatLockdown() then GameTooltip:AddLine("In Combat, Hold Shift + Click to (Un)Lock",0.88,0.65,0) else GameTooltip:AddLine("Lock/Unlock",0.88,0.65,0) end; GameTooltip:Show() end end)
+lockIcon:SetScript("OnEnter", function(self) if (MBDB.tooltips==true) then GameTooltip:SetOwner(self, "ANCHOR_CURSOR"); GameTooltip:ClearLines(); if InCombatLockdown() then GameTooltip:AddLine("In Combat, Hold Shift + Click to (Un)Lock",1, 0.3, 0.3) else GameTooltip:AddLine("Lock/Unlock",0.88,0.65,0) end; GameTooltip:Show() end end)
 lockIcon:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
 -------------------------------------------------------
--- MB Control Frame
+-- MB Control Frame and Movers
 -------------------------------------------------------
 
 local MB_controlFrame = CreateFrame("Frame", "MB_controlFrame", UIParent, BackdropTemplateMixin and "BackdropTemplate")
@@ -253,6 +317,46 @@ if MBDB.ctrlLock then
     MB_controlFrame:SetSize(100,35)
 end
 MB_controlFrame:SetPoint("LEFT", MB_iconFrame, "RIGHT",5,0)
+
+local moverRight = CreateFrame("Frame", "moverRight", MB_controlFrame, BackdropTemplateMixin and "BackdropTemplate")
+moverRight:SetBackdrop(defaultBackdrop)
+moverRight:SetBackdropColor(1,1,0.1,0.7) -- Make the move box yellow for better visibility
+moverRight:EnableMouse(true)
+moverRight:SetMovable(true)
+moverRight:SetSize(20,35)
+moverRight:SetPoint("LEFT", MB_controlFrame , "RIGHT")
+moverRight:SetAlpha(1)
+moverRight:SetScript("OnEnter", function(self)
+	GameTooltip:SetOwner(self, "ANCHOR_CURSOR"); 
+	GameTooltip:ClearLines(); 
+	if InCombatLockdown() then 
+		GameTooltip:AddLine("Cannot move in combat", 1, 0.3, 0.3) 
+	else 
+		GameTooltip:AddLine("Move Bar",0.88,0.65,0) 
+	end; 
+	GameTooltip:Show() 
+end)
+moverRight:RegisterForDrag("LeftButton")
+moverRight:SetScript("OnDragStart", function()
+    if InCombatLockdown() then 
+		return 
+	else
+		MB_controlFrame:StartMoving()
+	end
+end)
+moverRight:SetScript("OnDragStop", function()
+    if InCombatLockdown() then 
+		return 
+	else
+		MB_controlFrame:StopMovingOrSizing()
+		MB_savepositions()
+	end
+	
+end)
+
+-------------------------------------------------------
+-- MB Control Icon Frame and Icons
+-------------------------------------------------------
 
 local announceIcon  = CreateFrame("Button", "announceIcon ", MB_controlFrame)
 announceIcon :SetSize(20,20)
@@ -291,8 +395,25 @@ optIcon:SetNormalTexture("interface\\AddOns\\MarkingBarLives\\resources\\Gear_64
 optIcon:GetNormalTexture():SetTexCoord(0,.5,0,.5)
 optIcon:EnableMouse(true)
 optIcon:RegisterForClicks("AnyDown")
-optIcon:SetScript("OnClick", function(self,button) if ( button == "RightButton" ) then Settings.OpenToCategory(AnnounceOptPg) else Settings.OpenToCategory(MarkingBarOptSettingsCategoryId) end end )
-optIcon:SetScript("OnEnter", function(self) if (MBCtrlDB.tooltips==true) then GameTooltip:SetOwner(self, "ANCHOR_CURSOR"); GameTooltip:ClearLines(); GameTooltip:AddLine("Options",0.88,0.65,0); GameTooltip:Show() end end)
+optIcon:SetScript("OnClick", function(self,button) 
+	if InCombatLockdown() then
+		return
+	else 
+		Settings.OpenToCategory(MarkingBarOptSettingsCategoryId) 
+	end 
+end)
+optIcon:SetScript("OnEnter", function(self)
+    if (MBCtrlDB.tooltips == true) then
+        GameTooltip:SetOwner(self, "ANCHOR_CURSOR");
+        GameTooltip:ClearLines();
+        if InCombatLockdown() then
+            GameTooltip:AddLine("Cannot open in combat", 1, 0.3, 0.3)
+        else
+            GameTooltip:AddLine("Options", 0.88, 0.65, 0);
+        end
+	GameTooltip:Show();
+    end
+end)
 optIcon:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
 local ctrlLockIcon = CreateFrame("Button", "ctrlLockIcon", MB_controlFrame)
@@ -300,23 +421,11 @@ ctrlLockIcon:SetSize(20,20)
 ctrlLockIcon:SetNormalTexture("Interface\\AddOns\\MarkingBarLives\\resources\\Glues-Addon-Icons")
 ctrlLockIcon:GetNormalTexture():SetTexCoord(0.25, 0.50, 0, 1)
 ctrlLockIcon:SetScript("OnClick", function(self) MB_lockToggle("ctrl") end)
-ctrlLockIcon:SetScript("OnEnter", function(self) if (MBCtrlDB.tooltips==true) then GameTooltip:SetOwner(self, "ANCHOR_CURSOR"); GameTooltip:ClearLines(); if InCombatLockdown() then GameTooltip:AddLine("In Combat, Hold Shift + Click to (Un)Lock",0.88,0.65,0) else GameTooltip:AddLine("Lock/Unlock",0.88,0.65,0) end; GameTooltip:Show() end end)
+ctrlLockIcon:SetScript("OnEnter", function(self) if (MBCtrlDB.tooltips==true) then GameTooltip:SetOwner(self, "ANCHOR_CURSOR"); GameTooltip:ClearLines(); if InCombatLockdown() then GameTooltip:AddLine("In Combat, Hold Shift + Click to (Un)Lock",1, 0.3, 0.3) else GameTooltip:AddLine("Lock/Unlock",0.88,0.65,0) end; GameTooltip:Show() end end)
 ctrlLockIcon:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 ctrlLockIcon:SetPoint("LEFT", optIcon , "RIGHT")
 ctrlLockIcon:SetAlpha(1)
 ctrlLockIcon:EnableMouse(true)
-
-local moverRight = CreateFrame("Frame", "moverRight", MB_controlFrame, BackdropTemplateMixin and "BackdropTemplate")
-moverRight:SetBackdrop(defaultBackdrop)
-moverRight:SetBackdropColor(1,1,0.1,0.7) -- Make the move box yellow for better visibility
-moverRight:SetSize(20,35)
-moverRight:SetMovable(true)
-moverRight:SetScript("OnMouseDown", function(self,button) if (button=="LeftButton") then MB_controlFrame:StartMoving() end end)
-moverRight:SetScript("OnMouseUp", function(self) MB_controlFrame:StopMovingOrSizing() end)
-moverRight:SetPoint("LEFT", MB_controlFrame , "RIGHT")
-moverRight:SetAlpha(1)
-moverRight:EnableMouse(true)
-
 
 -------------------------------------------------------
 -- MBFlares Main Frame and Movers
@@ -340,8 +449,32 @@ MBFlares_moverLeft:EnableMouse(true)
 MBFlares_moverLeft:SetMovable(true)
 MBFlares_moverLeft:SetSize(20,35)
 MBFlares_moverLeft:SetPoint("RIGHT", MBFlares_mainFrame, "LEFT")
-MBFlares_moverLeft:SetScript("OnMouseDown", function(self,button) if (button=="LeftButton") then MBFlares_mainFrame:StartMoving() end end)
-MBFlares_moverLeft:SetScript("OnMouseUp", function(self) MBFlares_mainFrame:StopMovingOrSizing() end)
+MBFlares_moverLeft:SetScript("OnEnter", function(self)
+	GameTooltip:SetOwner(self, "ANCHOR_CURSOR"); 
+	GameTooltip:ClearLines(); 
+	if InCombatLockdown() then 
+		GameTooltip:AddLine("Cannot move in combat", 1, 0.3, 0.3) 
+	else 
+		GameTooltip:AddLine("Move Bar",0.88,0.65,0) 
+	end; 
+	GameTooltip:Show() 
+end)
+MBFlares_moverLeft:RegisterForDrag("LeftButton")
+MBFlares_moverLeft:SetScript("OnDragStart", function()
+    if InCombatLockdown() then 
+		return
+	else
+		MBFlares_mainFrame:StartMoving()
+	end
+end)
+MBFlares_moverLeft:SetScript("OnDragStop", function()
+    if InCombatLockdown() then 
+		return
+	else
+		MBFlares_mainFrame:StopMovingOrSizing()
+		MB_savepositions()
+	end
+end)
 
 -------------------------------------------------------
 -- The Flare Frame and Flares
@@ -460,7 +593,7 @@ flarelockIcon:SetNormalTexture("Interface\\AddOns\\MarkingBarLives\\resources\\G
 flarelockIcon:GetNormalTexture():SetTexCoord(0.25, 0.50, 0, 1)
 flarelockIcon:EnableMouse(true)
 flarelockIcon:SetScript("OnClick", function(self) MB_lockToggle("flare") end)
-flarelockIcon:SetScript("OnEnter", function(self) if (MBFlaresDB.tooltips) then GameTooltip:SetOwner(self, "ANCHOR_CURSOR"); GameTooltip:ClearLines(); if InCombatLockdown() then GameTooltip:AddLine("In Combat, Hold Shift + Click to (Un)Lock",0.88,0.65,0) else GameTooltip:AddLine("Lock/Unlock",0.88,0.65,0) end; GameTooltip:Show() end end)
+flarelockIcon:SetScript("OnEnter", function(self) if (MBFlaresDB.tooltips) then GameTooltip:SetOwner(self, "ANCHOR_CURSOR"); GameTooltip:ClearLines(); if InCombatLockdown() then GameTooltip:AddLine("In Combat, Hold Shift + Click to (Un)Lock",1, 0.3, 0.3) else GameTooltip:AddLine("Lock/Unlock",0.88,0.65,0) end; GameTooltip:Show() end end)
 flarelockIcon:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
 -------------------------------------------------------
@@ -534,39 +667,64 @@ function MB_Announce_to_Chat(ChatType)
     end
 end
 
-function MB_targetChecker(DB)
-    if ( DB == "main" ) then
-        MB_mainFrame:Hide()
-            if ( MBDB.shown == false ) then           -- show only with target
-            if ( UnitExists("target") ) then    -- target exists
-                MB_partyChecker(DB)
+local function SafeSetShown(frame, show)
+    if not frame then return end
+
+    if InCombatLockdown() then
+        frame._pendingShown = show
+        return
+    end
+
+    if show then
+        frame:Show()
+    else
+        frame:Hide()
+    end
+end
+
+local combatWatcher = CreateFrame("Frame")
+combatWatcher:RegisterEvent("PLAYER_REGEN_ENABLED")
+combatWatcher:SetScript("OnEvent", function()
+    for _, frame in ipairs({
+        MB_mainFrame,
+        MB_controlFrame,
+        MBFlares_mainFrame
+    }) do
+        if frame and frame._pendingShown ~= nil then
+            if frame._pendingShown then
+                frame:Show()
             else
-                MB_mainFrame:Hide()
+                frame:Hide()
             end
-        else                                    -- show regardless of target
-            MB_partyChecker(DB)
+            frame._pendingShown = nil
+        end
+    end
+end)
+
+function MB_targetChecker(DB)
+    if DB == "main" then
+        if not MB_mainFrame then return end
+		
+		if not MBDB.shown and not UnitExists("target") then --show only with targe & target exists
+            SafeSetShown(MB_mainFrame, false)
+        else
+            SafeSetShown(MB_mainFrame, true) -- show regardless of target
         end
     elseif ( DB == "ctrl" ) then
-        MB_controlFrame:Hide()
-            if ( MBCtrlDB.shown == false ) then           -- show only with target
-            if ( UnitExists("target") ) then    -- target exists
-                MB_partyChecker(DB)
-            else
-                MB_controlFrame:Hide()
-            end
-        else                                    -- show regardless of target
-            MB_partyChecker(DB)
+        if not MB_controlFrame then return end
+
+        if not MBCtrlDB.shown and not UnitExists("target") then --show only with targe & target exists
+            SafeSetShown(MB_controlFrame, false)
+        else
+            SafeSetShown(MB_mainFrame, true) -- show regardless of target
         end
     elseif ( DB == "flare" ) then
-        MBFlares_mainFrame:Hide()
-                if ( MBFlaresDB.shown == false ) then           -- show only with target
-            if ( UnitExists("target") ) then    -- target exists
-                MB_partyChecker(DB)
-            else
-                MBFlares_mainFrame:Hide()
-            end
-        else                                    -- show regardless of target
-            MB_partyChecker(DB)
+        if not MBFlares_mainFrame then return end
+
+        if not MBFlaresDB.shown and not UnitExists("target") then --show only with targe & target exists
+            SafeSetShown(MBFlares_mainFrame, false)
+        else
+            SafeSetShown(MB_mainFrame, true) -- show regardless of target
         end
     end
 end
@@ -576,60 +734,60 @@ function MB_partyChecker(DB)
 		if (IsInGroup()) then -- IN A PARTY OR RAID
 			if (IsInRaid()) then -- IN A RAID
 				if (UnitIsGroupLeader("player") or UnitIsGroupAssistant("player")) then
-					MB_mainFrame:Show()
+					SafeSetShown(MB_mainFrame, true)
 				end
 			else -- IN APARTY
 				if ( MBDB.partyShow == true ) then
-					MB_mainFrame:Show()
+					SafeSetShown(MB_mainFrame, true)
 				else
-					MB_mainFrame:Hide()
+					SafeSetShown(MB_mainFrame, false)
 				end
 			end
 		else -- NOT IN ANY GROUP
 			if ( MBDB.aloneShow == true ) then
-				MB_mainFrame:Show()
+				SafeSetShown(MB_mainFrame, true)
 			else
-				MB_mainFrame:Hide()
+				SafeSetShown(MB_mainFrame, false)
 			end
 		end
     elseif ( DB == "ctrl" ) then
 		if (IsInGroup()) then -- IN A PARTY OR RAID
 			if (IsInRaid()) then -- IN A RAID
 				if (UnitIsGroupLeader("player") or UnitIsGroupAssistant("player")) then
-					MB_controlFrame:Show()
+					SafeSetShown(MB_controlFrame, true)
 				end
 			else -- IN APARTY
 				if ( MBCtrlDB.partyShow == true ) then
-					MB_controlFrame:Show()
+					SafeSetShown(MB_controlFrame, true)
 				else
-					MB_controlFrame:Hide()
+					SafeSetShown(MB_controlFrame, false)
 				end
 			end
 		else -- NOT IN ANY GROUP
 			if ( MBCtrlDB.aloneShow == true ) then
-				MB_controlFrame:Show()
+				SafeSetShown(MB_controlFrame, true)
 			else
-				MB_controlFrame:Hide()
+				SafeSetShown(MB_controlFrame, false)
 			end
 		end
     elseif ( DB == "flare" ) then
 		if (IsInGroup()) then -- IN A PARTY OR RAID
 			if (IsInRaid()) then -- IN A RAID
 				if (UnitIsGroupLeader("player") or UnitIsGroupAssistant("player")) then
-					MBFlares_mainFrame:Show()
+					SafeSetShown(MBFlares_mainFrame, true)
 				end
 			else -- IN APARTY
 				if ( MBFlaresDB.partyShow == true ) then
-					MBFlares_mainFrame:Show()
+					SafeSetShown(MBFlares_mainFrame, true)
 				else
-					MBFlares_mainFrame:Hide()
+					SafeSetShown(MBFlares_mainFrame, false)
 				end
 			end
 		else -- NOT IN ANY GROUP
 			if ( MBFlaresDB.aloneShow == true ) then
-				MBFlares_mainFrame:Show()
+				SafeSetShown(MBFlares_mainFrame, true)
 			else
-				MBFlares_mainFrame:Hide()
+				SafeSetShown(MBFlares_mainFrame, false)
 			end
 		end
     end
@@ -866,26 +1024,52 @@ function MB_reset()
 	MB_checkUpdater()
 end
 
+local VALID_POINTS = {
+    TOP = true, BOTTOM = true, LEFT = true, RIGHT = true,
+    TOPLEFT = true, TOPRIGHT = true,
+    BOTTOMLEFT = true, BOTTOMRIGHT = true,
+    CENTER = true,
+}
+
+local function NormalizePoint(p)
+    return VALID_POINTS[p] and p or "TOP"
+end
+
 function MB_savepositions()
-	local f_ap, _, _, f_x, f_y = MBFlares_mainFrame:GetPoint() -- :)
-	local m_ap, _, _, m_x, m_y = MB_mainFrame:GetPoint()
-	MBCtrlDB.FlaresAP = f_ap
-	MBCtrlDB.FlaresX = f_x
-	MBCtrlDB.FlaresY = f_y
-	MBCtrlDB.MarkersAP = m_ap
-	MBCtrlDB.MarkersX = m_x
-	MBCtrlDB.MarkersY = m_y
+    local p, _, rp, x, y = MB_mainFrame:GetPoint()
+    MBCtrlDB.MarkersPoint = p
+    MBCtrlDB.MarkersRelativePoint = rp
+    MBCtrlDB.MarkersX = x
+    MBCtrlDB.MarkersY = y
+
+    local fp, _, frp, fx, fy = MBFlares_mainFrame:GetPoint()
+    MBCtrlDB.FlaresPoint = fp
+    MBCtrlDB.FlaresRelativePoint = frp
+    MBCtrlDB.FlaresX = fx
+    MBCtrlDB.FlaresY = fy
 end
 
 function MB_setpositions()
-	if (MBCtrlDB.MarkersX ~= nil) then
-		MB_mainFrame:ClearAllPoints()
-		MBFlares_mainFrame:ClearAllPoints()
-		MB_mainFrame:SetPoint(MBCtrlDB.MarkersAP, UIParent, MBCtrlDB.MarkersX, MBCtrlDB.MarkersY)
-		MBFlares_mainFrame:SetPoint(MBCtrlDB.FlaresAP, UIParent, MBCtrlDB.FlaresX, MBCtrlDB.FlaresY)
-		MB_checkUpdater()
-	end
-end;
+    MB_mainFrame:ClearAllPoints()
+    MB_mainFrame:SetPoint(
+        NormalizePoint(MBCtrlDB.MarkersPoint),
+        UIParent,
+        NormalizePoint(MBCtrlDB.MarkersRelativePoint),
+        MBCtrlDB.MarkersX,
+        MBCtrlDB.MarkersY
+    )
+
+    MBFlares_mainFrame:ClearAllPoints()
+    MBFlares_mainFrame:SetPoint(
+        NormalizePoint(MBCtrlDB.FlaresPoint),
+        UIParent,
+        NormalizePoint(MBCtrlDB.FlaresRelativePoint),
+        MBCtrlDB.FlaresX,
+        MBCtrlDB.FlaresY
+    )
+
+    MB_checkUpdater()
+end
 
 function MB_flip(dir)
 	iconSkull:ClearAllPoints()
@@ -1975,14 +2159,14 @@ MB_OnUpdate:RegisterEvent("PLAYER_LOGIN")
 MB_OnUpdate:SetScript("OnEvent", function(self,event,addon,...)
 	if (event=="ADDON_LOADED") then
 		if (addon=="MarkingBarLives") then
-			if (MBDB.shown) then MB_targetChecker("main") else MB_mainFrame:Hide() end
+			if (MBDB.shown) then MB_targetChecker("main") else SafeSetShown(MB_mainFrame, false) end
 			if (MBDB.locked) then MB_lock("main") else MB_unlock("main") end
 			MB_mainFrame:SetClampedToScreen(MBDB.clamped)
 			if (MBDB.bgHide) then MB_bgHide("main") else MB_bgShow("main") end
 			MB_mainFrame:SetScale(MBDB.scale,main)
 			MB_mainFrame:SetAlpha(MBDB.alpha,main)
 
-            if (MBCtrlDB.shown) then MB_targetChecker("ctrl") else MB_controlFrame:Hide() end
+            if (MBCtrlDB.shown) then MB_targetChecker("ctrl") else SafeSetShown(MB_controlFrame, false) end
 			MB_controlFrame:SetClampedToScreen(MBCtrlDB.clamped)
             if (MBCtrlDB.locked) then MB_lock("ctrl") else MB_unlock("ctrl") end
             if (MBCtrlDB.bgHide) then MB_bgHide("ctrl") else MB_bgShow("ctrl") end
@@ -1991,7 +2175,7 @@ MB_OnUpdate:SetScript("OnEvent", function(self,event,addon,...)
 
             MB_flipChecker()
 
-            if (MBFlaresDB.shown) then MB_targetChecker("flare") else MBFlares_mainFrame:Hide() end --for shown and partyShow
+            if (MBFlaresDB.shown) then MB_targetChecker("flare") else SafeSetShown(MBFlares_mainFrame, false) end --for shown and partyShow
 			if (MBFlaresDB.locked) then MB_lock("flare") else MB_unlock("flare") end
 			MBFlares_mainFrame:SetClampedToScreen(MBFlaresDB.clamped)
 			MB_flareflipChecker() -- for flipped and vertical
