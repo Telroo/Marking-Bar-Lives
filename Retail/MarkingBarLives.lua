@@ -144,6 +144,7 @@ moverLeft:SetScript("OnEnter", function(self)
 	end; 
 	GameTooltip:Show() 
 end)
+moverLeft:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 moverLeft:RegisterForDrag("LeftButton")
 moverLeft:SetScript("OnDragStart", function()
     if InCombatLockdown() then 
@@ -336,6 +337,7 @@ moverRight:SetScript("OnEnter", function(self)
 	end; 
 	GameTooltip:Show() 
 end)
+moverRight:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 moverRight:RegisterForDrag("LeftButton")
 moverRight:SetScript("OnDragStart", function()
     if InCombatLockdown() then 
@@ -459,6 +461,7 @@ MBFlares_moverLeft:SetScript("OnEnter", function(self)
 	end; 
 	GameTooltip:Show() 
 end)
+MBFlares_moverLeft:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 MBFlares_moverLeft:RegisterForDrag("LeftButton")
 MBFlares_moverLeft:SetScript("OnDragStart", function()
     if InCombatLockdown() then 
